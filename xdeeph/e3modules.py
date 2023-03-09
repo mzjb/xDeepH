@@ -6,7 +6,6 @@ from torch_geometric.utils import degree
 
 from e3nn.o3 import Irrep, Irreps, wigner_3j, matrix_to_angles, Linear, FullyConnectedTensorProduct, TensorProduct, SphericalHarmonics
 from e3nn.nn import Extract
-from e3nn.util.jit import compile_mode
 from .utils import flt2cplx, irreps_from_l1l2
 
 from .from_nequip.cutoffs import PolynomialCutoff
@@ -302,7 +301,7 @@ class e3TensorDecomp:
                                            [  0, -1j,   0,   1],
                                            [  0,  1j,   0,   1],
                                            [  1,   0,  -1,   0]],
-                                            dtype=torch.complex64, device=device_torch) / sqrt2
+                                            dtype=default_dtype_torch, device=device_torch) / sqrt2
         
         self.sort = None
         if if_sort:
@@ -385,7 +384,6 @@ class e3TensorDecomp:
         return mask
         
 
-@compile_mode('script')
 class e3LayerNorm(nn.Module):
     def __init__(self, irreps_in, tr_in=None, eps=1e-5, affine=True, normalization='component', subtract_mean=True, divide_norm=False):
         super().__init__()
@@ -510,7 +508,6 @@ class e3ElementWise:
         return torch.cat(out, dim=-1)
 
 
-@compile_mode('script')
 class SkipConnection(nn.Module):
     def __init__(self, irreps_in, irreps_out, is_complex=False):
         super().__init__()
@@ -529,7 +526,6 @@ class SkipConnection(nn.Module):
         return old + new
 
 
-@compile_mode('script')
 class SelfTp(nn.Module):
     def __init__(self, irreps_in, irreps_out, **kwargs):
         '''z_i = W'_{ij}x_j W''_{ik}x_k (k>=j)'''
@@ -566,7 +562,6 @@ class SelfTp(nn.Module):
         return self.tp(x, x, weights)
     
 
-@compile_mode('script')
 class SeparateWeightTensorProduct(nn.Module):
     def __init__(self, irreps_in1, irreps_in2, irreps_out, **kwargs):
         '''z_i = W'_{ij}x_j W''_{ik}y_k'''
@@ -603,7 +598,6 @@ class SeparateWeightTensorProduct(nn.Module):
         return self.tp(x1, x2, weights)
 
 
-@compile_mode('script')
 class SphericalBasis(nn.Module):
     def __init__(self, target_irreps, rcutoff, eps=1e-7, dtype=torch.get_default_dtype()):
         super().__init__()
