@@ -80,12 +80,7 @@ command is only used for converting the overlap format and not for performing mo
 You should set `task` to `[1]` in the config file of `deeph-inference` 
 (https://github.com/mzjb/DeepH-pack/blob/1130ad648d8b02be96e9de0144f8f8cff886a178/deeph/inference/inference_default.ini#L6).
 
-After obtaining the converted overlaps.h5 file, you should create an `info.json` file in the same
-directory with the content of
-```
-{"isspinful": true}
-```
-You also need to create a `magmom.txt` file to specify the magnetic structure of the material you want to predict.
+After obtaining the converted overlaps.h5 file, you should create a `magmom.txt` file to specify the magnetic structure of the material you want to predict.
 This is a text file where each line corresponds to an atom. The first column indicates whether the atom
 is magnetic, with 1 for yes and 0 for no. The second column indicates the magnitude of the magnetic moment.
 The third column indicates the polar angle of the magnetic moment in spherical coordinates.

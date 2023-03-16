@@ -2,10 +2,8 @@ import torch
 from torch import nn
 from e3nn import o3
 from e3nn.nn import Extract, Activation
-from e3nn.util.jit import compile_mode
 
 
-@compile_mode('script')
 class _Sortcut(torch.nn.Module):
     def __init__(self, *irreps_outs):
         super().__init__()
@@ -27,7 +25,6 @@ class _Sortcut(torch.nn.Module):
         return self.cut(x)
 
 
-@compile_mode('script')
 class TRGate(torch.nn.Module):
     def __init__(self, irreps_scalars, act_scalars, irreps_gates, act_gates, irreps_gated):
         super().__init__()
@@ -175,7 +172,6 @@ def get_tr_instr_lin(tr_irreps_in, tr_irreps_out, allow_zero=False):
     return instructions
 
 
-@compile_mode('script')
 class TRSeparateWeightTensorProduct(nn.Module):
     def __init__(self, irreps_in1, irreps_in2, irreps_out, **kwargs):
         '''z_i = W'_{ij}x_j W''_{ik}y_k'''
@@ -240,7 +236,6 @@ class TRFullyConnectedTensorProduct(o3.TensorProduct):
         super().__init__(irreps_in1.irreps, irreps_in2.irreps, irreps_out.irreps, instr, **kwargs)
 
 
-@compile_mode('script')
 class TRSkipConnection(nn.Module):
     def __init__(self, irreps_in, irreps_out):
         super().__init__()
